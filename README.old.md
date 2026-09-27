@@ -8,16 +8,16 @@ Aplicação Front-End do **Sistema de Controle de Solicitações de Disciplina**
 
 ## 1. Stack
 
-| Item        | Tecnologia                               |
-| ----------- | ---------------------------------------- |
-| Framework   | Angular (versão estável mais recente)    |
-| Linguagem   | TypeScript                               |
-| Componentes | Standalone Components                    |
-| Estado      | Signals + serviços                       |
-| HTTP        | `HttpClient` com interceptors funcionais |
-| Formulários | Reactive Forms                           |
-| UI          | Angular Material                         |
-| Testes      | Testes unitários do Angular CLI          |
+| Item | Tecnologia |
+| --- | --- |
+| Framework | Angular (versão estável mais recente) |
+| Linguagem | TypeScript |
+| Componentes | Standalone Components |
+| Estado | Signals + serviços |
+| HTTP | `HttpClient` com interceptors funcionais |
+| Formulários | Reactive Forms |
+| UI | Angular Material |
+| Testes | Testes unitários do Angular CLI |
 
 ## 2. Restrições do cenário que este projeto cumpre
 
@@ -29,7 +29,7 @@ Aplicação Front-End do **Sistema de Controle de Solicitações de Disciplina**
 
 ## 3. Arquitetura
 
-A organização é **por funcionalidade (feature-based)**, com uma área por perfil de acesso. Cada área é carregada sob demanda (_lazy loading_).
+A organização é **por funcionalidade (feature-based)**, com uma área por perfil de acesso. Cada área é carregada sob demanda (*lazy loading*).
 
 ```
 src/app/
@@ -83,21 +83,9 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./core/layout/shell.component'),
     children: [
-      {
-        path: 'admin',
-        canMatch: [perfilGuard('ADMIN')],
-        loadChildren: () => import('./features/admin/admin.routes'),
-      },
-      {
-        path: 'colaborador',
-        canMatch: [perfilGuard('COLABORADOR')],
-        loadChildren: () => import('./features/colaborador/colaborador.routes'),
-      },
-      {
-        path: 'discente',
-        canMatch: [perfilGuard('USUARIO')],
-        loadChildren: () => import('./features/discente/discente.routes'),
-      },
+      { path: 'admin',       canMatch: [perfilGuard('ADMIN')],       loadChildren: () => import('./features/admin/admin.routes') },
+      { path: 'colaborador', canMatch: [perfilGuard('COLABORADOR')], loadChildren: () => import('./features/colaborador/colaborador.routes') },
+      { path: 'discente',    canMatch: [perfilGuard('USUARIO')],     loadChildren: () => import('./features/discente/discente.routes') },
     ],
   },
 ];
@@ -109,16 +97,16 @@ Um usuário com mais de um perfil vê os menus de todos eles.
 
 ## 4. Padrões de projeto
 
-| Padrão                                                   | Onde é usado                                                                   |
-| -------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| **Smart / Dumb Components** (Container / Presentational) | `pages/` buscam dados e `components/` só exibem                                |
-| **Service / Facade**                                     | `*.api.ts` isolam o HTTP; serviços de tela combinam chamadas quando necessário |
-| **Interceptor** (Chain of Responsibility)                | `authInterceptor` e `errorInterceptor` em toda requisição                      |
-| **Guard**                                                | Proteção de rota por login e por perfil                                        |
-| **Observer**                                             | Signals e RxJS para reagir a mudanças de dados                                 |
-| **Dependency Injection**                                 | Serviços com `inject()`, sem instanciação manual                               |
-| **DTO / Model**                                          | Tipos em `*.model.ts` espelhando os contratos da API                           |
-| **Adapter**                                              | Conversão entre o formato da API e o formato da tela, quando forem diferentes  |
+| Padrão | Onde é usado |
+| --- | --- |
+| **Smart / Dumb Components** (Container / Presentational) | `pages/` buscam dados e `components/` só exibem |
+| **Service / Facade** | `*.api.ts` isolam o HTTP; serviços de tela combinam chamadas quando necessário |
+| **Interceptor** (Chain of Responsibility) | `authInterceptor` e `errorInterceptor` em toda requisição |
+| **Guard** | Proteção de rota por login e por perfil |
+| **Observer** | Signals e RxJS para reagir a mudanças de dados |
+| **Dependency Injection** | Serviços com `inject()`, sem instanciação manual |
+| **DTO / Model** | Tipos em `*.model.ts` espelhando os contratos da API |
+| **Adapter** | Conversão entre o formato da API e o formato da tela, quando forem diferentes |
 
 ## 5. Convenções
 
@@ -130,11 +118,11 @@ Um usuário com mais de um perfil vê os menus de todos eles.
 
 ## 6. Telas por perfil
 
-| Perfil        | Telas                                                                                                                           |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| Administrador | IES, Centros Acadêmicos, Cursos, Docentes (cadastrar, editar, inativar), Auditoria, Relatórios gerais                           |
-| Colaborador   | Disciplinas, Discentes, Validação de solicitações (por ordem de chegada), Relatórios                                            |
-| Discente      | Nova solicitação (de 2 a 9 disciplinas, prioridade de 1 a 5, no máximo 2 com prioridade máxima), Minhas solicitações, Relatório |
+| Perfil | Telas |
+| --- | --- |
+| Administrador | IES, Centros Acadêmicos, Cursos, Docentes (cadastrar, editar, inativar), Auditoria, Relatórios gerais |
+| Colaborador | Disciplinas, Discentes, Validação de solicitações (por ordem de chegada), Relatórios |
+| Discente | Nova solicitação (de 2 a 9 disciplinas, prioridade de 1 a 5, no máximo 2 com prioridade máxima), Minhas solicitações, Relatório |
 
 ---
 
