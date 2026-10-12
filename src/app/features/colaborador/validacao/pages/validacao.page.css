@@ -1,0 +1,33 @@
+.fila {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+}
+mat-card-header {
+  align-items: center;
+}
+.posicao {
+  display: grid;
+  place-items: center;
+  background: var(--ted-neutro-fundo);
+  font-weight: 500;
+}
+.proxima {
+  outline: 2px solid var(--ted-primaria);
+}
+.proxima .posicao {
+  background: var(--ted-primaria);
+  color: #fff;
+}
+.espaco {
+  flex: 1;
+}
+.validacao {
+  margin: 12px 0 0;
+  font-size: 13px;
+  opacity: 0.8;
+}
+mat-card-actions {
+  gap: 8px;
+  flex-wrap: wrap;
+}

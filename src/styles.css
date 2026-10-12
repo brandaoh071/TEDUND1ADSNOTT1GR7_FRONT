@@ -1,1 +1,118 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  color-scheme: light;
+  --ted-primaria: #1f4e79;
+  --ted-selecao: rgba(31, 78, 121, 0.12);
+  --ted-borda: rgba(0, 0, 0, 0.12);
+  --ted-erro: #b3261e;
+  --ted-fundo: #f5f7fa;
+  --ted-superficie: #ffffff;
+  --ted-fundo-login: linear-gradient(135deg, #1f4e79 0%, #3d7ab8 100%);
+  --ted-sucesso-fundo: #dcf3e3;
+  --ted-sucesso-texto: #1b6b35;
+  --ted-neutro-fundo: #e7e8ea;
+  --ted-neutro-texto: #4a4d52;
+  --ted-info-fundo: #dde8f6;
+  --ted-info-texto: #1f4e79;
+  --ted-alerta-fundo: #fdecd2;
+  --ted-alerta-texto: #8a4b00;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  background: var(--ted-fundo);
+}
+
+.coluna {
+  display: flex;
+  flex-direction: column;
+}
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.filtros mat-form-field {
+  min-width: 220px;
+}
+
+.tabela-container {
+  background: var(--ted-superficie);
+  border-radius: 8px;
+  overflow-x: auto;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.tabela-container table {
+  width: 100%;
+}
+
+.acoes-linha {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.vazio {
+  padding: 24px 16px;
+  text-align: center;
+  opacity: 0.7;
+}
+
+.grade-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0 16px;
+}
+
+.grade-form .largo {
+  grid-column: span 2;
+}
+
+.linha-dinamica {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 0 12px;
+  align-items: start;
+}
+
+.acoes-form {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.dica {
+  opacity: 0.7;
+}
+
+.notificacao-erro {
+  --mdc-snackbar-container-color: #b3261e;
+  --mat-snack-bar-container-color: #b3261e;
+}
+
+.notificacao-sucesso {
+  --mdc-snackbar-container-color: #1b6b35;
+  --mat-snack-bar-container-color: #1b6b35;
+}
+
+@media (max-width: 600px) {
+  .grade-form .largo {
+    grid-column: auto;
+  }
+  .linha-dinamica {
+    grid-template-columns: 1fr;
+  }
+  .filtros mat-form-field {
+    min-width: 100%;
+  }
+}

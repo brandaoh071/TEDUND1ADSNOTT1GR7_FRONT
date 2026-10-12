@@ -1,0 +1,47 @@
+<app-cabecalho-pagina
+  [titulo]="editando ? 'Editar centro acadêmico' : 'Novo centro acadêmico'"
+  subtitulo="Só pode existir 1 coordenador por centro acadêmico"
+/>
+
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="salvar()">
+      <div class="grade-form">
+        <mat-form-field class="largo">
+          <mat-label>Nome</mat-label>
+          <input matInput formControlName="nome" />
+          <mat-error>{{ form.controls.nome.errors?.['api'] ?? 'Informe o nome' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field class="largo">
+          <mat-label>IES vinculada</mat-label>
+          <mat-select formControlName="iesId">
+            @for (ies of opcoesIes(); track ies.id) {
+              <mat-option [value]="ies.id">{{ ies.rotulo }}</mat-option>
+            }
+          </mat-select>
+          <mat-hint>Somente IES ativas</mat-hint>
+          <mat-error>Selecione a IES</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>E-mail central</mat-label>
+          <input matInput type="email" formControlName="emailCentral" />
+          <mat-error>{{ form.controls.emailCentral.errors?.['api'] ?? 'Informe um e-mail válido' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Telefone central</mat-label>
+          <input matInput formControlName="telefoneCentral" />
+          <mat-error>{{ form.controls.telefoneCentral.errors?.['api'] ?? 'Informe o telefone' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field class="largo">
+          <mat-label>Coordenador(a)</mat-label>
+          <input matInput formControlName="coordenador" />
+          <mat-error>{{ form.controls.coordenador.errors?.['api'] ?? 'Informe o coordenador' }}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="acoes-form">
+        <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+        <button mat-flat-button type="submit" [disabled]="salvando()">Salvar</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

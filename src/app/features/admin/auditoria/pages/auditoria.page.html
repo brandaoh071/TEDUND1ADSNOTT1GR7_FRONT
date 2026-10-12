@@ -1,0 +1,86 @@
+<app-cabecalho-pagina
+  titulo="Auditoria"
+  subtitulo="RF007 · Todas as ações do sistema; horários exibidos no fuso de Brasília"
+/>
+
+<div class="filtros">
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>Usuário</mat-label>
+    <input matInput [ngModel]="usuario()" (ngModelChange)="usuario.set($event)" (keyup.enter)="filtrar()" />
+  </mat-form-field>
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>Ação</mat-label>
+    <mat-select [ngModel]="acao()" (ngModelChange)="acao.set($event); filtrar()">
+      <mat-option value="">Todas</mat-option>
+      @for (item of acoes; track item) {
+        <mat-option [value]="item">{{ item | rotulo }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>Entidade</mat-label>
+    <mat-select [ngModel]="entidade()" (ngModelChange)="entidade.set($event); filtrar()">
+      <mat-option value="">Todas</mat-option>
+      @for (item of entidades; track item) {
+        <mat-option [value]="item">{{ item }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>De</mat-label>
+    <input matInput type="date" [ngModel]="de()" (ngModelChange)="de.set($event)" />
+  </mat-form-field>
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>Até</mat-label>
+    <input matInput type="date" [ngModel]="ate()" (ngModelChange)="ate.set($event)" />
+  </mat-form-field>
+  <button mat-stroked-button (click)="filtrar()"><mat-icon>search</mat-icon> Filtrar</button>
+</div>
+
+<div class="tabela-container">
+  @if (carregando()) {
+    <mat-progress-bar mode="indeterminate" />
+  }
+  <table mat-table [dataSource]="pagina()?.conteudo ?? []">
+    <ng-container matColumnDef="dataHora">
+      <th mat-header-cell *matHeaderCellDef>Data/hora</th>
+      <td mat-cell *matCellDef="let log">{{ log.dataHora | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="usuario">
+      <th mat-header-cell *matHeaderCellDef>Usuário</th>
+      <td mat-cell *matCellDef="let log">{{ log.usuario }}</td>
+    </ng-container>
+    <ng-container matColumnDef="perfis">
+      <th mat-header-cell *matHeaderCellDef>Perfil</th>
+      <td mat-cell *matCellDef="let log">{{ log.perfis ? (log.perfis.split(',') | rotulo) : '-' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="acao">
+      <th mat-header-cell *matHeaderCellDef>Ação</th>
+      <td mat-cell *matCellDef="let log">{{ log.acao | rotulo }}</td>
+    </ng-container>
+    <ng-container matColumnDef="entidade">
+      <th mat-header-cell *matHeaderCellDef>Entidade</th>
+      <td mat-cell *matCellDef="let log">{{ log.entidade }}</td>
+    </ng-container>
+    <ng-container matColumnDef="idRegistro">
+      <th mat-header-cell *matHeaderCellDef>Registro</th>
+      <td mat-cell *matCellDef="let log">{{ log.idRegistro ?? '-' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="detalhes">
+      <th mat-header-cell *matHeaderCellDef>Detalhes</th>
+      <td mat-cell *matCellDef="let log">{{ log.detalhes }}</td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="colunas"></tr>
+    <tr mat-row *matRowDef="let linha; columns: colunas"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell vazio" [attr.colspan]="colunas.length">Nenhum registro encontrado.</td>
+    </tr>
+  </table>
+  <mat-paginator
+    [length]="pagina()?.totalElementos ?? 0"
+    [pageIndex]="indice()"
+    [pageSize]="tamanho()"
+    [pageSizeOptions]="[20, 50, 100]"
+    (page)="mudarPagina($event)"
+  />
+</div>

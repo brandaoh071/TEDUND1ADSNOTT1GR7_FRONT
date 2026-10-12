@@ -1,0 +1,56 @@
+<app-cabecalho-pagina
+  [titulo]="editando ? 'Editar discente' : 'Novo discente'"
+  subtitulo="O cadastro cria a conta de acesso com perfil Usuário; o login é a matrícula"
+/>
+
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="salvar()">
+      <div class="grade-form">
+        <mat-form-field>
+          <mat-label>Matrícula</mat-label>
+          <input matInput formControlName="matricula" />
+          @if (editando) {
+            <mat-hint>A matrícula não pode ser alterada</mat-hint>
+          }
+          <mat-error>{{ form.controls.matricula.errors?.['api'] ?? 'Informe a matrícula' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field class="largo">
+          <mat-label>Nome completo</mat-label>
+          <input matInput formControlName="nomeCompleto" />
+          <mat-error>{{ form.controls.nomeCompleto.errors?.['api'] ?? 'Informe o nome completo' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>E-mail de contato</mat-label>
+          <input matInput type="email" formControlName="email" />
+          <mat-error>{{ form.controls.email.errors?.['api'] ?? 'Informe um e-mail válido' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Telefone de contato</mat-label>
+          <input matInput formControlName="telefone" />
+          <mat-error>{{ form.controls.telefone.errors?.['api'] ?? 'Informe o telefone' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field class="largo">
+          <mat-label>Curso</mat-label>
+          <mat-select formControlName="cursoId">
+            @for (curso of opcoesCursos(); track curso.id) {
+              <mat-option [value]="curso.id">{{ curso.rotulo }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>Selecione o curso</mat-error>
+        </mat-form-field>
+        @if (!editando) {
+          <mat-form-field>
+            <mat-label>Senha inicial</mat-label>
+            <input matInput type="password" formControlName="senha" autocomplete="new-password" />
+            <mat-error>{{ form.controls.senha.errors?.['api'] ?? 'Mínimo de 6 caracteres' }}</mat-error>
+          </mat-form-field>
+        }
+      </div>
+      <div class="acoes-form">
+        <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+        <button mat-flat-button type="submit" [disabled]="salvando()">Salvar</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

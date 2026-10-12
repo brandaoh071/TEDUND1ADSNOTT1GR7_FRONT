@@ -1,0 +1,82 @@
+<app-cabecalho-pagina titulo="Discentes" subtitulo="RF011 e RF012 · Discentes recebem o perfil Usuário">
+  <a mat-flat-button routerLink="novo"><mat-icon>add</mat-icon> Novo discente</a>
+</app-cabecalho-pagina>
+
+<div class="filtros">
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>Buscar por nome, matrícula ou e-mail</mat-label>
+    <input matInput [ngModel]="busca()" (ngModelChange)="busca.set($event)" (keyup.enter)="filtrar()" />
+  </mat-form-field>
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>Curso</mat-label>
+    <mat-select [ngModel]="cursoId()" (ngModelChange)="cursoId.set($event); filtrar()">
+      <mat-option [value]="null">Todos</mat-option>
+      @for (curso of opcoesCursos(); track curso.id) {
+        <mat-option [value]="curso.id">{{ curso.rotulo }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>Status</mat-label>
+    <mat-select [ngModel]="status()" (ngModelChange)="status.set($event); filtrar()">
+      <mat-option value="">Todos</mat-option>
+      <mat-option value="ATIVO">Ativos</mat-option>
+      <mat-option value="INATIVO">Inativos</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button mat-stroked-button (click)="filtrar()"><mat-icon>search</mat-icon> Filtrar</button>
+</div>
+
+<div class="tabela-container">
+  @if (carregando()) {
+    <mat-progress-bar mode="indeterminate" />
+  }
+  <table mat-table [dataSource]="pagina()?.conteudo ?? []">
+    <ng-container matColumnDef="matricula">
+      <th mat-header-cell *matHeaderCellDef>Matrícula</th>
+      <td mat-cell *matCellDef="let d">{{ d.matricula }}</td>
+    </ng-container>
+    <ng-container matColumnDef="nomeCompleto">
+      <th mat-header-cell *matHeaderCellDef>Nome</th>
+      <td mat-cell *matCellDef="let d">{{ d.nomeCompleto }}</td>
+    </ng-container>
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>E-mail</th>
+      <td mat-cell *matCellDef="let d">{{ d.email }}</td>
+    </ng-container>
+    <ng-container matColumnDef="curso">
+      <th mat-header-cell *matHeaderCellDef>Curso</th>
+      <td mat-cell *matCellDef="let d">{{ d.cursoSigla }} - {{ d.cursoDescricao }}</td>
+    </ng-container>
+    <ng-container matColumnDef="dataCadastro">
+      <th mat-header-cell *matHeaderCellDef>Cadastro</th>
+      <td mat-cell *matCellDef="let d">{{ d.dataCadastro | date }}</td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let d"><app-status-badge [status]="d.status" /></td>
+    </ng-container>
+    <ng-container matColumnDef="acoes">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let d" class="acoes-linha">
+        <a mat-icon-button [routerLink]="[d.id]" matTooltip="Editar"><mat-icon>edit</mat-icon></a>
+        <button mat-icon-button (click)="verHistorico(d)" matTooltip="Histórico"><mat-icon>history</mat-icon></button>
+        <button mat-icon-button (click)="alternarStatus(d)" [matTooltip]="d.status === 'ATIVO' ? 'Inativar' : 'Reativar'">
+          <mat-icon>{{ d.status === 'ATIVO' ? 'block' : 'restart_alt' }}</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="colunas"></tr>
+    <tr mat-row *matRowDef="let linha; columns: colunas"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell vazio" [attr.colspan]="colunas.length">Nenhum discente encontrado.</td>
+    </tr>
+  </table>
+  <mat-paginator
+    [length]="pagina()?.totalElementos ?? 0"
+    [pageIndex]="indice()"
+    [pageSize]="tamanho()"
+    [pageSizeOptions]="[10, 20, 50]"
+    (page)="mudarPagina($event)"
+  />
+</div>

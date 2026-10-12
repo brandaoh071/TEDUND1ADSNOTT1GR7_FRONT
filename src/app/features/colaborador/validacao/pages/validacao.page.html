@@ -1,0 +1,71 @@
+<app-cabecalho-pagina
+  titulo="Validação de solicitações"
+  subtitulo="RF013 e RF015 · As solicitações são validadas por ordem de recebimento"
+/>
+
+<mat-tab-group [selectedIndex]="abaAtual()" (selectedIndexChange)="trocarAba($event)" animationDuration="0ms">
+  @for (item of abas; track item.status) {
+    <mat-tab [label]="item.rotulo" />
+  }
+</mat-tab-group>
+
+@if (carregando()) {
+  <mat-progress-bar mode="indeterminate" />
+}
+
+<div class="fila">
+  @for (solicitacao of pagina()?.conteudo ?? []; track solicitacao.id; let i = $index) {
+    <mat-card [class.proxima]="solicitacao.proximaDaFila">
+      <mat-card-header>
+        <div mat-card-avatar class="posicao">{{ posicao(i) }}º</div>
+        <mat-card-title>{{ solicitacao.discenteNome }}</mat-card-title>
+        <mat-card-subtitle>
+          {{ solicitacao.discenteMatricula }} · {{ solicitacao.cursoSigla }} · semestre
+          {{ solicitacao.semestreReferencia }} · recebida em {{ solicitacao.dataSolicitacao | date: 'dd/MM/yyyy HH:mm:ss' }}
+        </mat-card-subtitle>
+        <span class="espaco"></span>
+        <app-status-badge [status]="solicitacao.status" />
+      </mat-card-header>
+      <mat-card-content>
+        <app-itens-solicitacao [itens]="solicitacao.itens" />
+        @if (solicitacao.dataValidacao) {
+          <p class="validacao">
+            Validada por {{ solicitacao.validadoPor }} em {{ solicitacao.dataValidacao | date }}
+            @if (solicitacao.observacao) {
+              · {{ solicitacao.observacao }}
+            }
+          </p>
+        }
+      </mat-card-content>
+      @if (aba().podeAprovar || aba().podeEnviarParaEspera) {
+        <mat-card-actions align="end">
+          @if (!solicitacao.proximaDaFila) {
+            <span class="dica">Aguardando a validação das solicitações anteriores do mesmo centro acadêmico</span>
+          }
+          @if (aba().podeEnviarParaEspera) {
+            <button mat-stroked-button [disabled]="!solicitacao.proximaDaFila" (click)="enviarParaListaDeEspera(solicitacao)">
+              <mat-icon>hourglass_empty</mat-icon> Lista de espera
+            </button>
+          }
+          <button mat-flat-button [disabled]="!solicitacao.proximaDaFila" (click)="aprovar(solicitacao)">
+            <mat-icon>check</mat-icon> Aprovar
+          </button>
+        </mat-card-actions>
+      }
+    </mat-card>
+  } @empty {
+    @if (!carregando()) {
+      <p class="dica vazio">Nenhuma solicitação nesta situação.</p>
+    }
+  }
+</div>
+
+@if ((pagina()?.totalPaginas ?? 0) > 1) {
+  <mat-paginator
+    [length]="pagina()?.totalElementos ?? 0"
+    [pageIndex]="indice()"
+    [pageSize]="tamanho"
+    [hidePageSize]="true"
+    (page)="mudarPagina($event)"
+  />
+}

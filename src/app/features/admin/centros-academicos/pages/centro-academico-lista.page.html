@@ -1,0 +1,81 @@
+<app-cabecalho-pagina titulo="Centros Acadêmicos" subtitulo="RF003 · Todo CA pertence a uma única IES">
+  <a mat-flat-button routerLink="novo"><mat-icon>add</mat-icon> Novo centro acadêmico</a>
+</app-cabecalho-pagina>
+
+<div class="filtros">
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>Buscar por nome ou coordenador</mat-label>
+    <input matInput [ngModel]="busca()" (ngModelChange)="busca.set($event)" (keyup.enter)="filtrar()" />
+  </mat-form-field>
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>IES</mat-label>
+    <mat-select [ngModel]="iesId()" (ngModelChange)="iesId.set($event); filtrar()">
+      <mat-option [value]="null">Todas</mat-option>
+      @for (ies of opcoesIes(); track ies.id) {
+        <mat-option [value]="ies.id">{{ ies.rotulo }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>Status</mat-label>
+    <mat-select [ngModel]="status()" (ngModelChange)="status.set($event); filtrar()">
+      <mat-option value="">Todos</mat-option>
+      <mat-option value="ATIVO">Ativos</mat-option>
+      <mat-option value="INATIVO">Inativos</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button mat-stroked-button (click)="filtrar()"><mat-icon>search</mat-icon> Filtrar</button>
+</div>
+
+<div class="tabela-container">
+  @if (carregando()) {
+    <mat-progress-bar mode="indeterminate" />
+  }
+  <table mat-table [dataSource]="pagina()?.conteudo ?? []">
+    <ng-container matColumnDef="nome">
+      <th mat-header-cell *matHeaderCellDef>Nome</th>
+      <td mat-cell *matCellDef="let ca">{{ ca.nome }}</td>
+    </ng-container>
+    <ng-container matColumnDef="ies">
+      <th mat-header-cell *matHeaderCellDef>IES</th>
+      <td mat-cell *matCellDef="let ca">{{ ca.iesSigla }}</td>
+    </ng-container>
+    <ng-container matColumnDef="coordenador">
+      <th mat-header-cell *matHeaderCellDef>Coordenador(a)</th>
+      <td mat-cell *matCellDef="let ca">{{ ca.coordenador }}</td>
+    </ng-container>
+    <ng-container matColumnDef="emailCentral">
+      <th mat-header-cell *matHeaderCellDef>E-mail</th>
+      <td mat-cell *matCellDef="let ca">{{ ca.emailCentral }}</td>
+    </ng-container>
+    <ng-container matColumnDef="dataCadastro">
+      <th mat-header-cell *matHeaderCellDef>Cadastro</th>
+      <td mat-cell *matCellDef="let ca">{{ ca.dataCadastro | date }}</td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let ca"><app-status-badge [status]="ca.status" /></td>
+    </ng-container>
+    <ng-container matColumnDef="acoes">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let ca" class="acoes-linha">
+        <a mat-icon-button [routerLink]="[ca.id]" matTooltip="Editar"><mat-icon>edit</mat-icon></a>
+        <button mat-icon-button (click)="alternarStatus(ca)" [matTooltip]="ca.status === 'ATIVO' ? 'Inativar' : 'Reativar'">
+          <mat-icon>{{ ca.status === 'ATIVO' ? 'block' : 'restart_alt' }}</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="colunas"></tr>
+    <tr mat-row *matRowDef="let linha; columns: colunas"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell vazio" [attr.colspan]="colunas.length">Nenhum centro acadêmico encontrado.</td>
+    </tr>
+  </table>
+  <mat-paginator
+    [length]="pagina()?.totalElementos ?? 0"
+    [pageIndex]="indice()"
+    [pageSize]="tamanho()"
+    [pageSizeOptions]="[10, 20, 50]"
+    (page)="mudarPagina($event)"
+  />
+</div>

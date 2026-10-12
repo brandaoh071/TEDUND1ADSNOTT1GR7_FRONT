@@ -1,0 +1,54 @@
+<app-cabecalho-pagina
+  [titulo]="editando ? 'Editar disciplina' : 'Nova disciplina'"
+  subtitulo="Toda disciplina pertence a um único curso"
+/>
+
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="salvar()">
+      <div class="grade-form">
+        <mat-form-field>
+          <mat-label>Sigla</mat-label>
+          <input matInput formControlName="sigla" />
+          <mat-error>{{ form.controls.sigla.errors?.['api'] ?? 'Informe a sigla' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field class="largo">
+          <mat-label>Descrição</mat-label>
+          <input matInput formControlName="descricao" />
+          <mat-error>{{ form.controls.descricao.errors?.['api'] ?? 'Informe a descrição' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field class="largo">
+          <mat-label>Curso</mat-label>
+          <mat-select formControlName="cursoId">
+            @for (curso of opcoesCursos(); track curso.id) {
+              <mat-option [value]="curso.id">{{ curso.rotulo }}</mat-option>
+            }
+          </mat-select>
+          <mat-hint>Somente cursos ativos</mat-hint>
+          <mat-error>Selecione o curso</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Carga horária (h)</mat-label>
+          <input matInput type="number" min="1" max="1000" formControlName="cargaHoraria" />
+          <mat-error>{{ form.controls.cargaHoraria.errors?.['api'] ?? 'Entre 1 e 1000 horas' }}</mat-error>
+        </mat-form-field>
+        @if (administrador) {
+          <mat-form-field class="largo">
+            <mat-label>Docente responsável</mat-label>
+            <mat-select formControlName="docenteId">
+              <mat-option [value]="null">Eu mesmo (se eu for docente)</mat-option>
+              @for (docente of opcoesDocentes(); track docente.id) {
+                <mat-option [value]="docente.id">{{ docente.rotulo }}</mat-option>
+              }
+            </mat-select>
+            <mat-hint>O colaborador sempre cadastra as disciplinas que leciona</mat-hint>
+          </mat-form-field>
+        }
+      </div>
+      <div class="acoes-form">
+        <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+        <button mat-flat-button type="submit" [disabled]="salvando()">Salvar</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

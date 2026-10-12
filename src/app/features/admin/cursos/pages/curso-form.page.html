@@ -1,0 +1,48 @@
+<app-cabecalho-pagina [titulo]="editando ? 'Editar curso' : 'Novo curso'" />
+
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="salvar()">
+      <div class="grade-form">
+        <mat-form-field>
+          <mat-label>Sigla</mat-label>
+          <input matInput formControlName="sigla" />
+          <mat-error>{{ form.controls.sigla.errors?.['api'] ?? 'Informe a sigla' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field class="largo">
+          <mat-label>Descrição</mat-label>
+          <input matInput formControlName="descricao" />
+          <mat-error>{{ form.controls.descricao.errors?.['api'] ?? 'Informe a descrição' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field class="largo">
+          <mat-label>Centro acadêmico</mat-label>
+          <mat-select formControlName="centroAcademicoId">
+            @for (ca of opcoesCentros(); track ca.id) {
+              <mat-option [value]="ca.id">{{ ca.rotulo }}</mat-option>
+            }
+          </mat-select>
+          <mat-hint>Somente centros acadêmicos ativos</mat-hint>
+          <mat-error>Selecione o centro acadêmico</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Turnos oferecidos</mat-label>
+          <mat-select formControlName="turnos" multiple>
+            @for (turno of turnos; track turno) {
+              <mat-option [value]="turno">{{ turno | rotulo }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>Selecione ao menos um turno</mat-error>
+        </mat-form-field>
+        <mat-form-field class="largo">
+          <mat-label>Coordenador(a) do curso</mat-label>
+          <input matInput formControlName="coordenador" />
+          <mat-error>{{ form.controls.coordenador.errors?.['api'] ?? 'Informe o coordenador' }}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="acoes-form">
+        <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+        <button mat-flat-button type="submit" [disabled]="salvando()">Salvar</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
