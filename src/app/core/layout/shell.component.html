@@ -1,0 +1,39 @@
+<mat-toolbar class="barra">
+  @if (celular()) {
+    <button mat-icon-button (click)="menu.toggle()" aria-label="Abrir menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+  }
+  <a routerLink="/" class="marca">TED · Solicitações de Disciplina</a>
+  <span class="espaco"></span>
+  <span class="usuario">
+    <mat-icon>account_circle</mat-icon>
+    {{ auth.login() }} <small>({{ auth.perfis() | rotulo }})</small>
+  </span>
+  <button mat-icon-button (click)="auth.sair()" aria-label="Sair" title="Sair">
+    <mat-icon>logout</mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-sidenav-container class="container">
+  <mat-sidenav #menu [mode]="celular() ? 'over' : 'side'" [opened]="!celular()" class="lateral">
+    <mat-nav-list>
+      <a mat-list-item routerLink="/inicio" routerLinkActive="ativo" (click)="celular() && menu.close()">
+        <mat-icon matListItemIcon>home</mat-icon>
+        <span matListItemTitle>Início</span>
+      </a>
+      @for (secao of secoes(); track secao.perfil) {
+        <div mat-subheader>{{ secao.perfil | rotulo }}</div>
+        @for (item of secao.itens; track item.rota) {
+          <a mat-list-item [routerLink]="item.rota" routerLinkActive="ativo" (click)="celular() && menu.close()">
+            <mat-icon matListItemIcon>{{ item.icone }}</mat-icon>
+            <span matListItemTitle>{{ item.rotulo }}</span>
+          </a>
+        }
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content class="conteudo">
+    <router-outlet />
+  </mat-sidenav-content>
+</mat-sidenav-container>

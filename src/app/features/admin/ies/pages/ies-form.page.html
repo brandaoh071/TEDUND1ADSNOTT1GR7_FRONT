@@ -1,0 +1,66 @@
+<app-cabecalho-pagina [titulo]="editando ? 'Editar IES' : 'Nova IES'" subtitulo="Só pode existir 1 reitor por IES" />
+
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="salvar()">
+      <div class="grade-form">
+        <mat-form-field>
+          <mat-label>Sigla</mat-label>
+          <input matInput formControlName="sigla" />
+          <mat-error>{{ form.controls.sigla.errors?.['api'] ?? 'Informe a sigla (até 20 caracteres)' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field class="largo">
+          <mat-label>Nome</mat-label>
+          <input matInput formControlName="nome" />
+          <mat-error>{{ form.controls.nome.errors?.['api'] ?? 'Informe o nome' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>E-mail central</mat-label>
+          <input matInput type="email" formControlName="emailCentral" />
+          <mat-error>{{ form.controls.emailCentral.errors?.['api'] ?? 'Informe um e-mail válido' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Telefone central</mat-label>
+          <input matInput formControlName="telefoneCentral" />
+          <mat-error>{{ form.controls.telefoneCentral.errors?.['api'] ?? 'Informe o telefone' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field class="largo">
+          <mat-label>Reitor(a)</mat-label>
+          <input matInput formControlName="reitor" />
+          <mat-error>{{ form.controls.reitor.errors?.['api'] ?? 'Informe o reitor' }}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <h3>Pró-reitorias</h3>
+      <div formArrayName="proReitorias">
+        @for (grupo of proReitorias.controls; track grupo; let i = $index) {
+          <div class="linha-dinamica" [formGroupName]="i">
+            <mat-form-field>
+              <mat-label>Pró-reitoria</mat-label>
+              <input matInput formControlName="nome" />
+              <mat-error>Informe o nome</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Nomeado(a)</mat-label>
+              <input matInput formControlName="nomeado" />
+              <mat-error>Informe o nomeado</mat-error>
+            </mat-form-field>
+            <button mat-icon-button type="button" (click)="removerProReitoria(i)" aria-label="Remover">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        } @empty {
+          <p class="dica">Nenhuma pró-reitoria informada.</p>
+        }
+      </div>
+      <button mat-stroked-button type="button" (click)="adicionarProReitoria()">
+        <mat-icon>add</mat-icon> Adicionar pró-reitoria
+      </button>
+
+      <div class="acoes-form">
+        <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+        <button mat-flat-button type="submit" [disabled]="salvando()">Salvar</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

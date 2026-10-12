@@ -1,0 +1,52 @@
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 16px;
+  align-items: start;
+}
+.resumo {
+  position: sticky;
+  top: 16px;
+}
+.contador {
+  margin-top: 8px;
+}
+.escolhidas {
+  padding-left: 20px;
+}
+.escolhidas li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 2px 0;
+}
+.prioridade {
+  font-weight: 500;
+}
+.violacao {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  color: var(--ted-erro);
+  margin: 4px 0;
+}
+.campo-prioridade {
+  width: 130px;
+}
+.marcada {
+  background: var(--ted-selecao);
+}
+.aviso mat-card-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+@media (max-width: 1000px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .resumo {
+    position: static;
+  }
+}

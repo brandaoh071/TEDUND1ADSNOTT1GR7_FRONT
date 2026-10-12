@@ -140,9 +140,15 @@ Um usuário com mais de um perfil vê os menus de todos eles.
 
 ## 7. Como executar
 
-> A seção será preenchida quando o projeto for gerado.
+Pré-requisitos: Node 22 e a API do Back-End em execução em `http://localhost:8080`.
 
 ```bash
 npm install
 npm start          # http://localhost:4200
+npm test           # testes unitários (Vitest)
+npm run build      # build de produção em dist/
 ```
+
+A URL da API fica em `src/environments/environment.ts`. Entre com `admin` / `admin123` (administrador inicial criado pela migração do Back-End).
+
+O projeto foi gerado com SSR. Todas as rotas estão em `RenderMode.Client` (`app.routes.server.ts`): o servidor Node só entrega a aplicação, que roda inteira no navegador. Assim o token salvo no `localStorage` funciona sem adaptações e o `Dockerfile` existente continua válido.

@@ -1,0 +1,81 @@
+<app-cabecalho-pagina titulo="Cursos" subtitulo="RF004 · Todo curso pertence a um único centro acadêmico">
+  <a mat-flat-button routerLink="novo"><mat-icon>add</mat-icon> Novo curso</a>
+</app-cabecalho-pagina>
+
+<div class="filtros">
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>Buscar por sigla ou descrição</mat-label>
+    <input matInput [ngModel]="busca()" (ngModelChange)="busca.set($event)" (keyup.enter)="filtrar()" />
+  </mat-form-field>
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>Centro acadêmico</mat-label>
+    <mat-select [ngModel]="centroAcademicoId()" (ngModelChange)="centroAcademicoId.set($event); filtrar()">
+      <mat-option [value]="null">Todos</mat-option>
+      @for (ca of opcoesCentros(); track ca.id) {
+        <mat-option [value]="ca.id">{{ ca.rotulo }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>Status</mat-label>
+    <mat-select [ngModel]="status()" (ngModelChange)="status.set($event); filtrar()">
+      <mat-option value="">Todos</mat-option>
+      <mat-option value="ATIVO">Ativos</mat-option>
+      <mat-option value="INATIVO">Inativos</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button mat-stroked-button (click)="filtrar()"><mat-icon>search</mat-icon> Filtrar</button>
+</div>
+
+<div class="tabela-container">
+  @if (carregando()) {
+    <mat-progress-bar mode="indeterminate" />
+  }
+  <table mat-table [dataSource]="pagina()?.conteudo ?? []">
+    <ng-container matColumnDef="sigla">
+      <th mat-header-cell *matHeaderCellDef>Sigla</th>
+      <td mat-cell *matCellDef="let curso">{{ curso.sigla }}</td>
+    </ng-container>
+    <ng-container matColumnDef="descricao">
+      <th mat-header-cell *matHeaderCellDef>Descrição</th>
+      <td mat-cell *matCellDef="let curso">{{ curso.descricao }}</td>
+    </ng-container>
+    <ng-container matColumnDef="centro">
+      <th mat-header-cell *matHeaderCellDef>Centro acadêmico</th>
+      <td mat-cell *matCellDef="let curso">{{ curso.centroAcademicoNome }} · {{ curso.iesSigla }}</td>
+    </ng-container>
+    <ng-container matColumnDef="turnos">
+      <th mat-header-cell *matHeaderCellDef>Turnos</th>
+      <td mat-cell *matCellDef="let curso">{{ curso.turnos | rotulo }}</td>
+    </ng-container>
+    <ng-container matColumnDef="coordenador">
+      <th mat-header-cell *matHeaderCellDef>Coordenador(a)</th>
+      <td mat-cell *matCellDef="let curso">{{ curso.coordenador }}</td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let curso"><app-status-badge [status]="curso.status" /></td>
+    </ng-container>
+    <ng-container matColumnDef="acoes">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let curso" class="acoes-linha">
+        <a mat-icon-button [routerLink]="[curso.id]" matTooltip="Editar"><mat-icon>edit</mat-icon></a>
+        <button mat-icon-button (click)="alternarStatus(curso)" [matTooltip]="curso.status === 'ATIVO' ? 'Inativar' : 'Reativar'">
+          <mat-icon>{{ curso.status === 'ATIVO' ? 'block' : 'restart_alt' }}</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="colunas"></tr>
+    <tr mat-row *matRowDef="let linha; columns: colunas"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell vazio" [attr.colspan]="colunas.length">Nenhum curso encontrado.</td>
+    </tr>
+  </table>
+  <mat-paginator
+    [length]="pagina()?.totalElementos ?? 0"
+    [pageIndex]="indice()"
+    [pageSize]="tamanho()"
+    [pageSizeOptions]="[10, 20, 50]"
+    (page)="mudarPagina($event)"
+  />
+</div>
