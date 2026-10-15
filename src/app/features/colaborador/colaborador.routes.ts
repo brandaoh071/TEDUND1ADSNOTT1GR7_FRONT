@@ -37,4 +37,9 @@ export default [
     title: 'Editar discente · TED',
     loadComponent: () => import('./discentes/pages/discente-form.page'),
   },
+  {
+    path: 'relatorio',
+    title: 'Meu relatório · TED',
+    loadComponent: () => import('./relatorio/pages/relatorio-colaborador.page'),
+  },
 ] satisfies Routes;

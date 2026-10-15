@@ -12,4 +12,9 @@ export default [
     title: 'Minhas solicitações · TED',
     loadComponent: () => import('./solicitacoes/pages/minhas-solicitacoes.page'),
   },
+  {
+    path: 'relatorio',
+    title: 'Meu relatório · TED',
+    loadComponent: () => import('./relatorio/pages/relatorio-discente.page'),
+  },
 ] satisfies Routes;

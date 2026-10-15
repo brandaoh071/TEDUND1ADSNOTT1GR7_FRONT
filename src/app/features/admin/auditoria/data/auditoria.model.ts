@@ -10,7 +10,7 @@ export const ACOES_AUDITADAS = [
   'EMITIR_RELATORIO',
 ];
 
-export const ENTIDADES_AUDITADAS = ['Usuario', 'IES', 'CentroAcademico', 'Curso', 'Docente', 'Discente', 'Disciplina'];
+export const ENTIDADES_AUDITADAS = ['Usuario', 'IES', 'CentroAcademico', 'Curso', 'Docente', 'Discente', 'Disciplina', 'Solicitacao', 'Relatorio'];
 
 export interface LogAuditoria {
   id: number;

@@ -1,0 +1,164 @@
+<div class="nao-imprimir">
+  <app-cabecalho-pagina
+    titulo="Relatórios"
+    subtitulo="RF008 e RF009 · Cada emissão registra o administrador responsável"
+  />
+
+  <div class="filtros">
+    <button mat-flat-button (click)="emitirEstrutura()" [disabled]="carregando()">
+      <mat-icon>account_tree</mat-icon> Estrutura acadêmica
+    </button>
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>Docentes</mat-label>
+      <mat-select [ngModel]="filtroStatus()" (ngModelChange)="filtroStatus.set($event)">
+        <mat-option value="">Ativos e inativos</mat-option>
+        <mat-option value="ATIVO">Somente ativos</mat-option>
+        <mat-option value="INATIVO">Somente inativos</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-flat-button (click)="emitirDocentes()" [disabled]="carregando()">
+      <mat-icon>badge</mat-icon> Cadastro docente
+    </button>
+    @if (estrutura() || docentes()) {
+      <button mat-stroked-button (click)="imprimir()">
+        <mat-icon>print</mat-icon> Imprimir / salvar PDF
+      </button>
+    }
+  </div>
+
+  @if (carregando()) {
+    <mat-progress-bar mode="indeterminate" />
+  }
+</div>
+
+@if (estrutura(); as relatorio) {
+  <section class="relatorio">
+    <app-emissao-relatorio [emissao]="relatorio.emissao" />
+    @for (ies of relatorio.instituicoes; track ies.id) {
+      <h2>{{ ies.sigla }} · {{ ies.nome }}</h2>
+      <dl class="ficha">
+        <div>
+          <dt>E-mail central</dt>
+          <dd>{{ ies.emailCentral }}</dd>
+        </div>
+        <div>
+          <dt>Telefone central</dt>
+          <dd>{{ ies.telefoneCentral }}</dd>
+        </div>
+        <div>
+          <dt>Reitor</dt>
+          <dd>{{ ies.reitor }}</dd>
+        </div>
+        <div>
+          <dt>Cadastro</dt>
+          <dd>{{ ies.dataCadastro | date: 'dd/MM/yyyy' }}</dd>
+        </div>
+        <div>
+          <dt>Status</dt>
+          <dd>{{ ies.status | rotulo }}</dd>
+        </div>
+        <div>
+          <dt>Pró-reitorias</dt>
+          <dd>
+            @for (pro of ies.proReitorias; track pro.nome) {
+              {{ pro.nome }}: {{ pro.nomeado }}<br />
+            } @empty {
+              -
+            }
+          </dd>
+        </div>
+      </dl>
+      @for (ca of ies.centrosAcademicos; track ca.id) {
+        <div class="bloco">
+          <h3>Centro acadêmico {{ ca.nome }}</h3>
+          <dl class="ficha">
+            <div>
+              <dt>E-mail central</dt>
+              <dd>{{ ca.emailCentral }}</dd>
+            </div>
+            <div>
+              <dt>Telefone central</dt>
+              <dd>{{ ca.telefoneCentral }}</dd>
+            </div>
+            <div>
+              <dt>Coordenador</dt>
+              <dd>{{ ca.coordenador }}</dd>
+            </div>
+            <div>
+              <dt>Cadastro</dt>
+              <dd>{{ ca.dataCadastro | date: 'dd/MM/yyyy' }}</dd>
+            </div>
+            <div>
+              <dt>Status</dt>
+              <dd>{{ ca.status | rotulo }}</dd>
+            </div>
+          </dl>
+          @if (ca.cursos.length) {
+            <div class="tabela-container-relatorio">
+              <table class="tabela-relatorio">
+                <thead>
+                  <tr>
+                    <th>Sigla</th>
+                    <th>Descrição</th>
+                    <th>Coordenador</th>
+                    <th>Turnos</th>
+                    <th>Cadastro</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (curso of ca.cursos; track curso.id) {
+                    <tr>
+                      <td>{{ curso.sigla }}</td>
+                      <td>{{ curso.descricao }}</td>
+                      <td>{{ curso.coordenador }}</td>
+                      <td>{{ curso.turnos | rotulo }}</td>
+                      <td>{{ curso.dataCadastro | date: 'dd/MM/yyyy' }}</td>
+                      <td>{{ curso.status | rotulo }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          } @else {
+            <p class="dica">Nenhum curso cadastrado.</p>
+          }
+        </div>
+      } @empty {
+        <p class="dica">Nenhum centro acadêmico cadastrado.</p>
+      }
+    } @empty {
+      <p class="dica">Nenhuma IES cadastrada.</p>
+    }
+  </section>
+}
+
+@if (docentes(); as relatorio) {
+  <section class="relatorio">
+    <app-emissao-relatorio [emissao]="relatorio.emissao" />
+    <p>
+      {{ relatorio.totalAtivos }} docente(s) ativo(s) e {{ relatorio.totalInativos }} inativo(s).
+    </p>
+    @for (centro of relatorio.centrosAcademicos; track centro.centroAcademicoId) {
+      <h2>{{ centro.centroAcademico }}{{ centro.iesSigla ? ' · ' + centro.iesSigla : '' }}</h2>
+      @if (relatorio.emissao.filtroStatus !== 'INATIVO') {
+        <h3>Ativos ({{ centro.ativos.length }})</h3>
+        <app-pessoas-relatorio
+          [pessoas]="centro.ativos"
+          rotuloVinculo="Centro acadêmico"
+          vazio="Nenhum docente ativo."
+        />
+      }
+      @if (relatorio.emissao.filtroStatus !== 'ATIVO') {
+        <h3>Inativos ({{ centro.inativos.length }})</h3>
+        <app-pessoas-relatorio
+          [pessoas]="centro.inativos"
+          rotuloVinculo="Centro acadêmico"
+          vazio="Nenhum docente inativo."
+        />
+      }
+    } @empty {
+      <p class="dica">Nenhum docente encontrado.</p>
+    }
+  </section>
+}

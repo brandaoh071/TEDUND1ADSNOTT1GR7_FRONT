@@ -35,4 +35,9 @@ export default [
     loadComponent: () => import('./docentes/pages/docente-form.page'),
   },
   { path: 'auditoria', title: 'Auditoria · TED', loadComponent: () => import('./auditoria/pages/auditoria.page') },
+  {
+    path: 'relatorios',
+    title: 'Relatórios · TED',
+    loadComponent: () => import('./relatorios/pages/relatorios-admin.page'),
+  },
 ] satisfies Routes;

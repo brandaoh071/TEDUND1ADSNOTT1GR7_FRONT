@@ -8,7 +8,7 @@ describe('montarMenu', () => {
 
   it('discente vê apenas a própria área', () => {
     const rotas = montarMenu(['USUARIO']).flatMap((s) => s.itens.map((i) => i.rota));
-    expect(rotas).toEqual(['/discente/nova-solicitacao', '/discente/minhas-solicitacoes']);
+    expect(rotas).toEqual(['/discente/nova-solicitacao', '/discente/minhas-solicitacoes', '/discente/relatorio']);
   });
 
   it('perfis acumulados somam os menus', () => {

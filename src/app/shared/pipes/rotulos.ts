@@ -25,4 +25,8 @@ export const ROTULOS: Record<string, string> = {
   AGUARDANDO: 'Aguardando',
   EM_ANALISE: 'Em análise',
   LISTA_ESPERA: 'Lista de espera',
+  ESTRUTURA_ACADEMICA: 'Estrutura acadêmica',
+  DOCENTES: 'Cadastro docente',
+  COLABORADOR_COMPLETO: 'Relatório do colaborador',
+  DISCENTE_COMPLETO: 'Relatório do discente',
 };
