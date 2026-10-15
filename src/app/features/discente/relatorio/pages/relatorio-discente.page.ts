@@ -28,7 +28,7 @@ import { SolicitacoesRelatorioComponent } from '../../../../shared/relatorio/sol
     <div class="nao-imprimir">
       <app-cabecalho-pagina
         titulo="Meu relatório"
-        subtitulo="RF018 · Seus dados cadastrais e suas solicitações"
+        subtitulo="Seus dados cadastrais e suas solicitações"
       >
         <button mat-flat-button (click)="emitir()" [disabled]="carregando()">
           <mat-icon>description</mat-icon> Emitir relatório
