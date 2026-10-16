@@ -1,0 +1,62 @@
+.relatorio {
+  background: var(--ted-superficie);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+}
+.relatorio h2 {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 24px 0 8px;
+  color: var(--ted-primaria);
+}
+.relatorio h3 {
+  font-size: 15px;
+  font-weight: 500;
+  margin: 16px 0 6px;
+}
+.relatorio h4 {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 12px 0 4px;
+}
+.bloco {
+  border-left: 3px solid var(--ted-borda);
+  padding-left: 12px;
+  margin: 8px 0 16px;
+  break-inside: avoid;
+}
+.ficha {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 4px 16px;
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+.ficha dt {
+  font-size: 12px;
+  opacity: 0.7;
+}
+.ficha dd {
+  margin: 0 0 6px;
+}
+.tabela-relatorio {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+.tabela-relatorio th,
+.tabela-relatorio td {
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--ted-borda);
+  vertical-align: top;
+}
+.tabela-relatorio th {
+  font-weight: 500;
+  background: var(--ted-fundo);
+}
+.tabela-container-relatorio {
+  overflow-x: auto;
+}

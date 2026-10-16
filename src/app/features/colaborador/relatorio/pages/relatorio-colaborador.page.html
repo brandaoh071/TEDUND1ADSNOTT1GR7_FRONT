@@ -1,0 +1,100 @@
+<div class="nao-imprimir">
+  <app-cabecalho-pagina
+    titulo="Meu relatório"
+    subtitulo="Disciplinas, discentes e validações registradas por você"
+  >
+    <button mat-flat-button (click)="emitir()" [disabled]="carregando()">
+      <mat-icon>description</mat-icon> Emitir relatório
+    </button>
+    @if (relatorio()) {
+      <button mat-stroked-button (click)="imprimir()">
+        <mat-icon>print</mat-icon> Imprimir / salvar PDF
+      </button>
+    }
+  </app-cabecalho-pagina>
+  @if (carregando()) {
+    <mat-progress-bar mode="indeterminate" />
+  }
+</div>
+
+@if (relatorio(); as relatorio) {
+  <section class="relatorio">
+    <app-emissao-relatorio [emissao]="relatorio.emissao" />
+
+    @if (relatorio.docente; as docente) {
+      <h2>Identificação do docente</h2>
+      <dl class="ficha">
+        <div>
+          <dt>Matrícula</dt>
+          <dd>{{ docente.matricula }}</dd>
+        </div>
+        <div>
+          <dt>Nome completo</dt>
+          <dd>{{ docente.nomeCompleto }}</dd>
+        </div>
+        <div>
+          <dt>E-mail</dt>
+          <dd>{{ docente.email }}</dd>
+        </div>
+        <div>
+          <dt>Telefone</dt>
+          <dd>{{ docente.telefone }}</dd>
+        </div>
+        <div>
+          <dt>Centro acadêmico</dt>
+          <dd>{{ docente.vinculo }}</dd>
+        </div>
+        <div>
+          <dt>Status</dt>
+          <dd>{{ docente.status | rotulo }}</dd>
+        </div>
+      </dl>
+    }
+
+    <h2>Disciplinas ({{ relatorio.disciplinas.length }})</h2>
+    @if (relatorio.disciplinas.length) {
+      <div class="tabela-container-relatorio">
+        <table class="tabela-relatorio">
+          <thead>
+            <tr>
+              <th>Sigla</th>
+              <th>Descrição</th>
+              <th>Curso</th>
+              <th>Carga horária</th>
+              <th>Cadastro</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (disciplina of relatorio.disciplinas; track disciplina.id) {
+              <tr>
+                <td>{{ disciplina.sigla }}</td>
+                <td>{{ disciplina.descricao }}</td>
+                <td>{{ disciplina.curso }}</td>
+                <td>{{ disciplina.cargaHoraria }}h</td>
+                <td>{{ disciplina.dataCadastro | date: 'dd/MM/yyyy' }}</td>
+                <td>{{ disciplina.status | rotulo }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <p class="dica">Nenhuma disciplina.</p>
+    }
+
+    <h2>Discentes cadastrados ({{ relatorio.discentes.length }})</h2>
+    <app-pessoas-relatorio
+      [pessoas]="relatorio.discentes"
+      rotuloVinculo="Curso"
+      vazio="Nenhum discente cadastrado."
+    />
+
+    <h2>Solicitações validadas ({{ relatorio.solicitacoesValidadas.length }})</h2>
+    <app-solicitacoes-relatorio
+      [solicitacoes]="relatorio.solicitacoesValidadas"
+      [exibirDiscente]="true"
+      vazio="Nenhuma solicitação validada."
+    />
+  </section>
+}

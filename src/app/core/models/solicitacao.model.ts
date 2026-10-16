@@ -1,4 +1,4 @@
-export type StatusSolicitacao = 'AGUARDANDO' | 'EM_ANALISE' | 'LISTA_ESPERA';
+export type StatusSolicitacao = 'AGUARDANDO' | 'MATRICULADA' | 'LISTA_ESPERA';
 
 export interface ItemSolicitacao {
   disciplinaId: number;

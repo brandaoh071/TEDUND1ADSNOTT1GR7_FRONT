@@ -18,7 +18,7 @@ import { RotuloPipe } from '../pipes/rotulo.pipe';
       color: var(--ted-neutro-texto);
     }
     .ativo,
-    .em_analise {
+    .matriculada {
       background: var(--ted-sucesso-fundo);
       color: var(--ted-sucesso-texto);
     }

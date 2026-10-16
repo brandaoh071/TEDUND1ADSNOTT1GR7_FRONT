@@ -1,6 +1,6 @@
 <app-cabecalho-pagina
   titulo="Nova solicitação"
-  [subtitulo]="semestre() ? 'RF017 · Disciplinas que pretende cursar no semestre ' + semestre()!.semestreReferencia : 'RF017'"
+  [subtitulo]="semestre() ? 'Disciplinas que pretende cursar no semestre ' + semestre()!.semestreReferencia : ''"
 />
 
 @if (semestre()?.jaSolicitado) {

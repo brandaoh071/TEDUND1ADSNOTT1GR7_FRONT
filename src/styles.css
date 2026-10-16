@@ -116,3 +116,29 @@ body {
     min-width: 100%;
   }
 }
+
+@media print {
+  body {
+    background: #fff;
+  }
+  .nao-imprimir,
+  mat-toolbar,
+  mat-sidenav {
+    display: none !important;
+  }
+  app-shell {
+    height: auto !important;
+    display: block !important;
+  }
+  .mat-drawer-container,
+  .mat-drawer-content {
+    overflow: visible !important;
+    height: auto !important;
+    margin-left: 0 !important;
+    padding: 0 !important;
+  }
+  .relatorio {
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+}

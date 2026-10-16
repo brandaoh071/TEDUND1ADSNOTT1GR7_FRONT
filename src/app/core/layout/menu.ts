@@ -13,15 +13,18 @@ export const MENU_POR_PERFIL: Record<Perfil, ItemMenu[]> = {
     { rotulo: 'Cursos', icone: 'school', rota: '/admin/cursos' },
     { rotulo: 'Docentes', icone: 'badge', rota: '/admin/docentes' },
     { rotulo: 'Auditoria', icone: 'policy', rota: '/admin/auditoria' },
+    { rotulo: 'Relatórios', icone: 'summarize', rota: '/admin/relatorios' },
   ],
   COLABORADOR: [
     { rotulo: 'Disciplinas', icone: 'menu_book', rota: '/colaborador/disciplinas' },
     { rotulo: 'Discentes', icone: 'groups', rota: '/colaborador/discentes' },
     { rotulo: 'Validação de solicitações', icone: 'fact_check', rota: '/colaborador/validacao' },
+    { rotulo: 'Meu relatório', icone: 'summarize', rota: '/colaborador/relatorio' },
   ],
   USUARIO: [
     { rotulo: 'Nova solicitação', icone: 'playlist_add', rota: '/discente/nova-solicitacao' },
     { rotulo: 'Minhas solicitações', icone: 'list_alt', rota: '/discente/minhas-solicitacoes' },
+    { rotulo: 'Meu relatório', icone: 'summarize', rota: '/discente/relatorio' },
   ],
 };
 

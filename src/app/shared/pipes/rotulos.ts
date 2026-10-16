@@ -23,6 +23,10 @@ export const ROTULOS: Record<string, string> = {
   ENVIAR_SOLICITACAO: 'Envio de solicitação',
   EMITIR_RELATORIO: 'Emissão de relatório',
   AGUARDANDO: 'Aguardando',
-  EM_ANALISE: 'Em análise',
+  MATRICULADA: 'Matriculada',
   LISTA_ESPERA: 'Lista de espera',
+  ESTRUTURA_ACADEMICA: 'Estrutura acadêmica',
+  DOCENTES: 'Cadastro docente',
+  COLABORADOR_COMPLETO: 'Relatório do colaborador',
+  DISCENTE_COMPLETO: 'Relatório do discente',
 };

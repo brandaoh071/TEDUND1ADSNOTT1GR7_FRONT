@@ -54,7 +54,7 @@ export default class ValidacaoPage implements OnInit {
   readonly abas: AbaDaFila[] = [
     { status: 'AGUARDANDO', rotulo: 'Aguardando', podeAprovar: true, podeEnviarParaEspera: true },
     { status: 'LISTA_ESPERA', rotulo: 'Lista de espera', podeAprovar: true, podeEnviarParaEspera: false },
-    { status: 'EM_ANALISE', rotulo: 'Em análise', podeAprovar: false, podeEnviarParaEspera: false },
+    { status: 'MATRICULADA', rotulo: 'Matriculadas', podeAprovar: false, podeEnviarParaEspera: false },
   ];
   readonly tamanho = 10;
   readonly abaAtual = signal(0);
@@ -87,14 +87,14 @@ export default class ValidacaoPage implements OnInit {
       this.confirmacao
         .confirmar({
           titulo: 'Aprovar solicitação',
-          mensagem: `Aprovar a solicitação de ${solicitacao.discenteNome}? O status passará para "Em análise".`,
+          mensagem: `Aprovar a solicitação de ${solicitacao.discenteNome}? O discente ficará matriculado.`,
           confirmar: 'Aprovar',
         })
         .pipe(
           filter(Boolean),
           switchMap(() => this.api.aprovar(solicitacao.id)),
         ),
-      'Solicitação aprovada: status Em análise',
+      'Solicitação aprovada: discente matriculado',
     );
   }
 
