@@ -1,0 +1,6 @@
+{
+  "framework": null,
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/tedund1adsnott1gr7-front/browser",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.csr.html" }]
+}
