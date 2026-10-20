@@ -1,3 +1,3 @@
 export const environment = {
-  apiUrl: 'http://localhost:8080/api',
+  apiUrl: 'https://arquitetura-api.onrender.com/api',
 };
